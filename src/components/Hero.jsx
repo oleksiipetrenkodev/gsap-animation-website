@@ -18,7 +18,7 @@ function Hero() {
     if (loadedVideos === totalVideos - 1) {
       setIsLoading(false);
     }
-  });
+  }, [loadedVideos]);
 
   useGSAP(
     () => {
