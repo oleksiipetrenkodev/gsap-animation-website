@@ -67,7 +67,6 @@ function Hero() {
   const totalVideos = 4;
 
   const nextVideoRef = useRef(null);
-  const prevVideoRef = useRef(null);
 
   const upcomingVideoIndex = (currentIndex % totalVideos) + 1;
 
