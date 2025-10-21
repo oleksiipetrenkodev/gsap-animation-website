@@ -3,6 +3,8 @@ import { TiLocationArrow } from "react-icons/ti";
 
 export const BentoTilt = ({ children, className = "" }) => {
   const [transformStyle, setTransformStyle] = useState("");
+  const [animateOut, setAnimateOut] = useState(false);
+
   const itemRef = useRef(null);
 
   const handleMouseMove = (event) => {
@@ -17,12 +19,19 @@ export const BentoTilt = ({ children, className = "" }) => {
     const tiltX = (relativeY - 0.5) * 5;
     const tiltY = (relativeX - 0.5) * -5;
 
-    const newTransform = `perspective(700px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(.95, .95, .95)`;
+    const newTransform = `perspective(700px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(.98, .98, .98)`;
     setTransformStyle(newTransform);
   };
 
   const handleMouseLeave = () => {
+    // Trigger smooth return to identity
+    setAnimateOut(true);
     setTransformStyle("");
+  };
+
+  const handleTransitionEnd = () => {
+    // Remove transition so next mouse moves are immediate
+    if (animateOut) setAnimateOut(false);
   };
 
   return (
@@ -31,7 +40,12 @@ export const BentoTilt = ({ children, className = "" }) => {
       className={className}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ transform: transformStyle }}
+      onTransitionEnd={handleTransitionEnd}
+      style={{
+        transform: transformStyle,
+        transition: animateOut ? "transform 300ms ease-out" : "transform 0s",
+        willChange: "transform",
+      }}
     >
       {children}
     </div>
